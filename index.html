@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="ru">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Интерактивный тренажёр по CCNA Introduction to Networks: 600+ вопросов и генераторы задач на подсети, IPv6, порты и заголовки.">
-<title>Тренажёр CCNA ITN</title>
+<meta name="description" content="Interactive CCNA Introduction to Networks trainer: 600+ questions plus random generators for subnetting, IPv6, ports and header fields.">
+<title>CCNA ITN Trainer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
@@ -120,8 +120,8 @@ td.r,th.r{text-align:right}
   <header class="top">
     <span class="mark">ITN</span>
     <div>
-      <h1>Тренажёр CCNA ITN</h1>
-      <p class="sub">Вопросы по 9 лекциям, 17 модулям курса и end-term, включая детали со слайдов: поля заголовков, порты, команды. Вопросы на английском, как на экзамене, пояснения на русском.</p>
+      <h1>CCNA ITN Trainer</h1>
+      <p class="sub">Questions from 9 lectures, all 17 course modules and the end-term, including slide details: header fields, ports, commands. Explanations are in Russian.</p>
     </div>
   </header>
   <main id="app"></main>
@@ -130,22 +130,22 @@ td.r,th.r{text-align:right}
 <script>
 /* ---------- Темы ---------- */
 const TOPICS = {
-  net:{n:"Сети сегодня",s:"Лекция 1 · Модуль 1"},
-  ios:{n:"IOS и настройка устройств",s:"Лекции 1, 5 · Модули 2, 10"},
-  models:{n:"Протоколы, модели, инкапсуляция",s:"Лекция 2 · Модуль 3"},
-  phys:{n:"Физический уровень",s:"Лекция 3 · Модуль 4"},
-  num:{n:"Системы счисления",s:"Лекция 3 · Модуль 5"},
-  l2:{n:"Канальный уровень и Ethernet",s:"Лекция 4 · Модули 6–7"},
-  l3:{n:"Сетевой уровень и маршрутизация",s:"Лекция 5 · Модуль 8"},
-  arp:{n:"ARP и Neighbor Discovery",s:"Лекция 5 · Модуль 9"},
-  v4:{n:"IPv4 и подсети",s:"Лекция 6 · Модуль 11"},
-  v6:{n:"IPv6",s:"Лекция 7 · Модуль 12"},
-  icmp:{n:"ICMP, ping, traceroute",s:"Лекция 7 · Модуль 13"},
-  tr:{n:"Транспортный уровень",s:"Лекция 8 · Модуль 14"},
-  app:{n:"Прикладной уровень",s:"Лекция 9 · Модуль 15"},
-  sec:{n:"Безопасность и маленькая сеть",s:"Модули 16–17"}
+  net:{n:"Networking Today",s:"Lecture 1 · Module 1"},
+  ios:{n:"IOS and Device Configuration",s:"Lectures 1, 5 · Modules 2, 10"},
+  models:{n:"Protocols, Models, Encapsulation",s:"Lecture 2 · Module 3"},
+  phys:{n:"Physical Layer",s:"Lecture 3 · Module 4"},
+  num:{n:"Number Systems",s:"Lecture 3 · Module 5"},
+  l2:{n:"Data Link Layer and Ethernet",s:"Lecture 4 · Modules 6–7"},
+  l3:{n:"Network Layer and Routing",s:"Lecture 5 · Module 8"},
+  arp:{n:"ARP and Neighbor Discovery",s:"Lecture 5 · Module 9"},
+  v4:{n:"IPv4 and Subnetting",s:"Lecture 6 · Module 11"},
+  v6:{n:"IPv6",s:"Lecture 7 · Module 12"},
+  icmp:{n:"ICMP, ping, traceroute",s:"Lecture 7 · Module 13"},
+  tr:{n:"Transport Layer",s:"Lecture 8 · Module 14"},
+  app:{n:"Application Layer",s:"Lecture 9 · Module 15"},
+  sec:{n:"Security and Small Networks",s:"Modules 16–17"}
 };
-const LEVELS = {1:{n:"Базовый",c:"--l1"},2:{n:"Применение",c:"--l2"},3:{n:"Понимание",c:"--l3"}};
+const LEVELS = {1:{n:"Basic",c:"--l1"},2:{n:"Applied",c:"--l2"},3:{n:"Understanding",c:"--l3"}};
 
 /* ---------- Банк вопросов ----------
    o: варианты; «*» в начале = правильный. a: принимаемые ответы для ввода. x: "end" = вопрос с end-term. */
@@ -172,7 +172,7 @@ const BANK = [
 {t:"ios",l:1,q:"Which access method uses a physical cable and works even when no network services are configured?",o:["*Console","SSH","Telnet","HTTP"],e:"Консоль — out-of-band доступ кабелем, нужна для первой настройки."},
 {t:"ios",l:1,q:"What type of interface has no physical port and is used to manage a switch remotely?",o:["*Switch virtual interface (SVI)","FastEthernet interface","Console port","AUX port"],e:"SVI (например, interface vlan 1) — виртуальный интерфейс коммутатора с IP-адресом для управления."},
 {t:"ios",l:2,q:"An administrator changes an interface IP address and the device is reloaded before anything is saved. What happens?",o:["*The device boots with the old configuration from NVRAM, and the change is lost","The change is kept because it took effect immediately","The device enters setup mode","The change is kept in flash memory"],e:"Изменения сразу вступают в силу в running-config (RAM), но после перезагрузки грузится startup-config из NVRAM."},
-{t:"ios",l:2,q:"Type the command that saves the running configuration so it survives a reload.",a:["copy running-config startup-config","copy run start","copy running-config startup","copy run startup-config","write memory","write","wr","wr mem"],ph:"команда IOS",e:"copy running-config startup-config (сокращённо copy run start) копирует текущую конфигурацию из RAM в NVRAM."},
+{t:"ios",l:2,q:"Type the command that saves the running configuration so it survives a reload.",a:["copy running-config startup-config","copy run start","copy running-config startup","copy run startup-config","write memory","write","wr","wr mem"],ph:"IOS command",e:"copy running-config startup-config (сокращённо copy run start) копирует текущую конфигурацию из RAM в NVRAM."},
 {t:"ios",l:2,q:"Which command protects privileged EXEC mode with a password that is stored encrypted?",o:["*enable secret","enable password","password","login"],e:"enable secret хранит пароль в виде хеша. enable password хранит его открытым текстом."},
 {t:"ios",l:2,q:"Which hostname follows the Cisco naming guidelines?",o:["*Floor2-Sw1","2nd-Floor-Sw","Floor 2 Switch","-Floor2Sw"],e:"Имя начинается с буквы, без пробелов, заканчивается буквой или цифрой и короче 64 символов."},
 {t:"ios",l:2,q:"A router boots and enters setup mode. What is the reason?",o:["*The startup configuration file is missing from NVRAM","The IOS image is missing from flash","The running configuration is corrupted","The console password is wrong"],e:"Если в NVRAM нет startup-config, роутер предлагает диалог первоначальной настройки (setup mode)."},
@@ -218,12 +218,12 @@ const BANK = [
 {t:"phys",l:3,q:"UTP cable is run next to large motors and power cables in a factory, and the link shows many errors. What is the best solution?",o:["*Replace the run with fiber-optic cable","Use a crossover cable","Use a longer UTP cable","Enable auto-MDIX"],e:"Источник проблемы — электромагнитные помехи. Оптоволокно к ним невосприимчиво."},
 
 /* Системы счисления */
-{t:"num",l:1,q:"Convert the binary number 10101101 to decimal.",a:["173"],ph:"число",e:"128 + 32 + 8 + 4 + 1 = 173."},
-{t:"num",l:1,q:"Convert the decimal number 232 to an 8-bit binary number.",a:["11101000"],ph:"8 бит",e:"232 = 128 + 64 + 32 + 8 → 11101000."},
-{t:"num",l:1,q:"Convert the hexadecimal value CA to decimal.",a:["202"],ph:"число",e:"C = 12, A = 10: 12 × 16 + 10 = 202."},
+{t:"num",l:1,q:"Convert the binary number 10101101 to decimal.",a:["173"],ph:"number",e:"128 + 32 + 8 + 4 + 1 = 173."},
+{t:"num",l:1,q:"Convert the decimal number 232 to an 8-bit binary number.",a:["11101000"],ph:"8 bits",e:"232 = 128 + 64 + 32 + 8 → 11101000."},
+{t:"num",l:1,q:"Convert the hexadecimal value CA to decimal.",a:["202"],ph:"number",e:"C = 12, A = 10: 12 × 16 + 10 = 202."},
 {t:"num",l:1,q:"How many bits are in an IPv4 address?",o:["*32","48","64","128"],e:"IPv4 — 32 бита, MAC — 48 бит, IPv6 — 128 бит."},
 {t:"num",l:2,q:"What is the dotted decimal form of 11001011.00000000.01110001.11010011?",o:["*203.0.113.211","203.0.114.211","211.113.0.203","203.0.113.209"],e:"11001011 = 203, 00000000 = 0, 01110001 = 113, 11010011 = 211."},
-{t:"num",l:2,q:"How many bits does one hexadecimal digit represent?",a:["4"],ph:"число",e:"Одна hex-цифра = 4 бита (полубайт), поэтому байт = 2 hex-цифры."},
+{t:"num",l:2,q:"How many bits does one hexadecimal digit represent?",a:["4"],ph:"number",e:"Одна hex-цифра = 4 бита (полубайт), поэтому байт = 2 hex-цифры."},
 {t:"num",l:2,q:"Which is the hexadecimal equivalent of 254?",o:["*FE","EF","FD","EE"],e:"254 = 15 × 16 + 14 → F и E."},
 {t:"num",l:3,q:"Why is hexadecimal used to write IPv6 and MAC addresses?",o:["*Each hex digit maps exactly to 4 bits, so long binary values become short and easy to convert","Hex values use fewer bits than binary values","Routers can only process hexadecimal values","IEEE requires all addresses to be stored in hex"],e:"Hex — просто короткая запись двоичного числа: каждая цифра ровно 4 бита. Количество бит не меняется."},
 
@@ -279,14 +279,14 @@ const BANK = [
 {t:"arp",l:3,q:"An ARP table on 192.168.1.0/24 shows 192.168.1.255 mapped to ff-ff-ff-ff-ff-ff. What is this entry?",o:["*A static entry for the subnet broadcast address","An entry created by an ARP reply","A poisoned entry from an attacker","The default gateway's entry"],e:"Широковещательный IP всегда соответствует широковещательному MAC, такая запись статическая."},
 
 /* IPv4 */
-{t:"v4",l:1,q:"How many usable host addresses are in a /26 subnet?",a:["62"],ph:"число",e:"6 бит хоста: 2^6 − 2 = 62."},
-{t:"v4",l:1,q:"Write the prefix length for the subnet mask 255.255.255.224.",a:["27","/27"],ph:"например /24",e:"224 = 11100000: 24 + 3 = 27 единиц."},
+{t:"v4",l:1,q:"How many usable host addresses are in a /26 subnet?",a:["62"],ph:"number",e:"6 бит хоста: 2^6 − 2 = 62."},
+{t:"v4",l:1,q:"Write the prefix length for the subnet mask 255.255.255.224.",a:["27","/27"],ph:"e.g. /24",e:"224 = 11100000: 24 + 3 = 27 единиц."},
 {t:"v4",l:1,q:"Which three IPv4 ranges are private addresses defined in RFC 1918?",o:["*10.0.0.0/8","*172.16.0.0/12","*192.168.0.0/16","169.254.0.0/16","100.64.0.0/10"],e:"169.254.0.0/16 — link-local (APIPA), 100.64.0.0/10 — общий адрес провайдера (CGNAT)."},
 {t:"v4",l:1,q:"Which address does a host use to test its own TCP/IP stack?",o:["*127.0.0.1","169.254.0.1","0.0.0.0","255.255.255.255"],e:"Loopback 127.0.0.0/8, обычно 127.0.0.1."},
 {t:"v4",l:1,q:"Which device does not forward broadcasts by default?",o:["*Router","Switch","Hub","Access point"],e:"Роутер — граница broadcast-домена."},
 {t:"v4",l:1,q:"Which legacy class does an address with first octet 172 belong to?",o:["*Class B","Class A","Class C","Class D"],e:"A: 1–127, B: 128–191, C: 192–223, D: 224–239 (multicast)."},
 {t:"v4",l:2,q:"A Windows host shows the address 169.254.10.7. What does this mean?",o:["*The host did not get an answer from a DHCP server and gave itself a link-local address","The host is configured with a private static address","The host is on a public network","The host is using NAT"],e:"169.254.0.0/16 — APIPA, адрес, который хост назначает себе сам без DHCP."},
-{t:"v4",l:2,q:"What is the network address of 172.16.4.100/16?",a:["172.16.0.0"],ph:"адрес",e:"Маска /16 оставляет первые два октета: 172.16.0.0."},
+{t:"v4",l:2,q:"What is the network address of 172.16.4.100/16?",a:["172.16.0.0"],ph:"address",e:"Маска /16 оставляет первые два октета: 172.16.0.0."},
 {t:"v4",l:2,q:"Which address can be assigned to a host in 192.168.10.64/26?",o:["*192.168.10.100","192.168.10.64","192.168.10.127","192.168.10.130"],e:"Блок 64: сеть .64, broadcast .127, хосты .65–.126. Адрес .130 — уже другая подсеть."},
 {t:"v4",l:2,q:"Which subnet mask gives at least 50 host addresses with the least waste?",o:["*255.255.255.192","255.255.255.224","255.255.255.128","255.255.255.240"],e:"/26 даёт 62 хоста. /27 даёт только 30, а /25 — 126, это лишнее."},
 {t:"v4",l:2,q:"When designing with VLSM, which subnet should be allocated first?",o:["*The subnet with the largest number of hosts","The point-to-point WAN links","The subnet with the fewest hosts","Any order works"],e:"Начинаем с самой большой подсети, затем меньше, чтобы блоки ложились без пересечений."},
@@ -295,10 +295,10 @@ const BANK = [
 {t:"v4",l:2,q:"Which two problems are caused by very large broadcast domains?",o:["*Slow network operations","*Slow device operations","Too many collisions on full-duplex links","Routing loops","IP address conflicts"],e:"Каждый broadcast получают и обрабатывают все устройства. Сегментация уменьшает домены."},
 {t:"v4",l:3,q:"Are 192.168.1.130/26 and 192.168.1.190/26 in the same subnet?",o:["*Yes, both are in 192.168.1.128/26","No, .130 is in .128/26 and .190 is in .192/26","No, .190 is the broadcast address","Yes, but only because the mask is /24"],e:"Блок 64: подсеть .128–.191. Оба адреса внутри, broadcast — .191."},
 {t:"v4",l:3,q:"An ISP gives a company 172.16.0.0/22. It needs 10 subnets, the largest with 40 hosts. Which mask works?",o:["*/26 — 16 subnets of 62 hosts","/27 — 32 subnets of 30 hosts","/25 — 8 subnets of 126 hosts","/24 — 4 subnets of 254 hosts"],e:"Пример из лекции 6. /26 заимствует 4 бита: 16 подсетей ≥ 10, и 62 хоста ≥ 40."},
-{t:"v4",l:3,q:"A network uses /27 for every subnet: four LANs and three point-to-point WAN links. How many addresses are wasted on the three WAN links?",a:["84"],ph:"число",e:"Пример из лекции 6. В /27 30 хостов, на канале нужно 2 → 28 лишних × 3 = 84. Поэтому применяют VLSM и /30."},
+{t:"v4",l:3,q:"A network uses /27 for every subnet: four LANs and three point-to-point WAN links. How many addresses are wasted on the three WAN links?",a:["84"],ph:"number",e:"Пример из лекции 6. В /27 30 хостов, на канале нужно 2 → 28 лишних × 3 = 84. Поэтому применяют VLSM и /30."},
 {t:"v4",l:3,q:"With VLSM, which mask is the best fit for a point-to-point WAN link?",o:["*255.255.255.252","255.255.255.248","255.255.255.240","255.255.255.0"],e:"/30 даёт ровно 2 адреса хостов — по одному на каждый роутер."},
-{t:"v4",l:3,q:"What is the broadcast address of 10.20.30.40/20?",a:["10.20.31.255"],ph:"адрес",e:"/20: интересный 3-й октет, маска 240, шаг 16. 30 лежит в блоке 16–31 → сеть 10.20.16.0, broadcast 10.20.31.255."},
-{t:"v4",l:3,q:"192.168.5.0/24 is split into 4 equal subnets. What is the last usable host of the second subnet?",a:["192.168.5.126"],ph:"адрес",e:"4 подсети → /26, шаг 64. Вторая подсеть 192.168.5.64/26, broadcast .127, последний хост .126."},
+{t:"v4",l:3,q:"What is the broadcast address of 10.20.30.40/20?",a:["10.20.31.255"],ph:"address",e:"/20: интересный 3-й октет, маска 240, шаг 16. 30 лежит в блоке 16–31 → сеть 10.20.16.0, broadcast 10.20.31.255."},
+{t:"v4",l:3,q:"192.168.5.0/24 is split into 4 equal subnets. What is the last usable host of the second subnet?",a:["192.168.5.126"],ph:"address",e:"4 подсети → /26, шаг 64. Вторая подсеть 192.168.5.64/26, broadcast .127, последний хост .126."},
 {t:"v4",l:3,q:"A /24 network is subnetted with a /27 mask. How many subnets and usable hosts per subnet result?",o:["*8 subnets with 30 hosts each","4 subnets with 62 hosts each","8 subnets with 32 hosts each","16 subnets with 14 hosts each"],e:"Заимствовано 3 бита: 2^3 = 8 подсетей. Осталось 5 бит: 2^5 − 2 = 30 хостов."},
 {t:"v4",l:3,q:"How does PAT (NAT overload) let hundreds of internal hosts share one public IPv4 address?",x:"end",o:["*It maps each internal private address and source port to a unique source port on the public address","It assigns public addresses to hosts dynamically","It converts IPv4 packets into IPv6 packets","It encrypts the transport layer sequence numbers"],e:"Адрес наружу один, а различает хосты номер порта в таблице трансляций роутера."},
 
@@ -310,7 +310,7 @@ const BANK = [
 {t:"v6",l:1,q:"Which IPv6 prefix indicates a multicast address?",x:"end",o:["*ff00::/8","2000::/3","fe80::/10","fc00::/7"],e:"Multicast начинается с ff."},
 {t:"v6",l:2,q:"Which part of a global unicast address is assigned by the ISP?",o:["*Global routing prefix","Subnet ID","Interface ID","Link-local prefix"],e:"Префикс даёт провайдер, Subnet ID задаёт организация, Interface ID определяет устройство."},
 {t:"v6",l:2,q:"What is the recommended prefix length for most IPv6 subnets?",o:["*/64","/48","/56","/128"],e:"SLAAC и EUI-64 рассчитаны на 64-битный Interface ID."},
-{t:"v6",l:2,q:"An organization receives a /48 and uses /64 subnets. How many subnets can it create without borrowing interface ID bits?",a:["65536","65 536","2^16"],ph:"число",e:"64 − 48 = 16 бит Subnet ID → 2^16 = 65 536 подсетей."},
+{t:"v6",l:2,q:"An organization receives a /48 and uses /64 subnets. How many subnets can it create without borrowing interface ID bits?",a:["65536","65 536","2^16"],ph:"number",e:"64 − 48 = 16 бит Subnet ID → 2^16 = 65 536 подсетей."},
 {t:"v6",l:2,q:"Which IPv6 address is not valid?",o:["*2001:db8::abcd::1","2001:db8:0:abcd::1","fe80::1","::1"],e:"Двойное двоеточие можно использовать только один раз, иначе неясно, сколько нулей где."},
 {t:"v6",l:2,q:"A host builds its own address from the prefix in the RA, then gets the DNS server address from a server. Which method is this?",o:["*SLAAC with stateless DHCPv6","SLAAC only","Stateful DHCPv6","Static configuration"],e:"Адрес — сам по SLAAC, остальное (DNS) — с DHCPv6 без учёта состояния."},
 {t:"v6",l:2,q:"Which address must every IPv6-enabled interface have?",o:["*A link-local address","A global unicast address","A unique local address","A multicast address assigned by DHCPv6"],e:"LLA создаётся автоматически и является минимумом для IPv6-интерфейса."},
@@ -349,8 +349,8 @@ const BANK = [
 {t:"tr",l:2,q:"How many exchanges are needed to end a TCP session between two hosts?",o:["*Four","Two","Three","One"],e:"FIN, ACK, FIN, ACK — каждая сторона закрывает свою половину."},
 {t:"tr",l:2,q:"Where does a client normally take its source port from?",o:["*The dynamic/private range 49152–65535","The well-known range","The registered range only","It always uses the same port as the server"],e:"Клиенту не нужен постоянный порт, он берёт случайный свободный."},
 {t:"tr",l:2,q:"Where is the TCP Maximum Segment Size negotiated?",x:"end",o:["*In the TCP Options field during the three-way handshake","In every IP header","In a DHCP Request","In a DNS record"],e:"MSS (обычно 1460 байт) стороны сообщают друг другу в SYN-сегментах."},
-{t:"tr",l:3,q:"A sender transmits a segment with sequence number 1 that carries 10 bytes. Which acknowledgment number does the receiver return?",a:["11"],ph:"число",e:"ACK — номер следующего ожидаемого байта: 1 + 10 = 11."},
-{t:"tr",l:3,q:"The window size is 3000 bytes and the MSS is 1000 bytes. How many full segments can the sender send before it must wait for an acknowledgment?",a:["3"],ph:"число",e:"3000 / 1000 = 3 сегмента, потом нужно подтверждение."},
+{t:"tr",l:3,q:"A sender transmits a segment with sequence number 1 that carries 10 bytes. Which acknowledgment number does the receiver return?",a:["11"],ph:"number",e:"ACK — номер следующего ожидаемого байта: 1 + 10 = 11."},
+{t:"tr",l:3,q:"The window size is 3000 bytes and the MSS is 1000 bytes. How many full segments can the sender send before it must wait for an acknowledgment?",a:["3"],ph:"number",e:"3000 / 1000 = 3 сегмента, потом нужно подтверждение."},
 {t:"tr",l:3,q:"Two browser tabs are open to the same HTTPS server. How does the PC tell the server's replies apart?",o:["*Each tab's connection uses a different source port","The server uses different destination ports for each tab","The tabs use different IP addresses","TCP sequence numbers alone identify the tab"],e:"Пары сокетов отличаются только портом клиента. По нему ответ находит нужную вкладку."},
 {t:"tr",l:3,q:"Why does a live video call use UDP even though some packets get lost?",o:["*A resent packet would arrive too late to be useful; low delay matters more than completeness","UDP guarantees delivery of video frames","TCP cannot carry video","UDP encrypts the stream"],e:"Повторная отправка для живого видео бессмысленна: момент уже прошёл. Лучше пропустить кадр, чем зависнуть."},
 {t:"tr",l:3,q:"What does a TCP sender do when it detects congestion?",o:["*It reduces the amount of data it sends before waiting for an acknowledgment","It switches to UDP","It increases the window size","It resends every segment twice"],e:"Отправитель уменьшает объём неподтверждённых данных, снижая нагрузку на сеть."},
@@ -523,15 +523,15 @@ BANK.push(
 {t:"phys",l:3,q:"A technician must choose cabling for a hospital MRI room with strong electromagnetic fields and electrical hazards. Which choice is best?",o:["*Fiber-optic, because it is completely immune to EMI, RFI and electrical hazards","UTP, because it is cheapest","STP, because it is immune to electrical hazards","Coaxial, because it has a shield"],e:"Только оптика полностью невосприимчива к помехам и не проводит электричество."},
 
 /* Лекция 3: системы счисления */
-{t:"num",l:1,q:"Convert binary 11000000 to decimal.",a:["192"],ph:"число",e:"128 + 64 = 192."},
-{t:"num",l:1,q:"Convert decimal 168 to an 8-bit binary number.",a:["10101000"],ph:"8 бит",e:"168 = 128 + 32 + 8 → 10101000 (пример из лекции 3)."},
+{t:"num",l:1,q:"Convert binary 11000000 to decimal.",a:["192"],ph:"number",e:"128 + 64 = 192."},
+{t:"num",l:1,q:"Convert decimal 168 to an 8-bit binary number.",a:["10101000"],ph:"8 bits",e:"168 = 128 + 32 + 8 → 10101000 (пример из лекции 3)."},
 {t:"num",l:2,q:"Convert decimal 168 to hexadecimal.",a:["a8","0xa8"],ph:"hex",e:"168 = 10101000. Группы по 4 бита: 1010 = A, 1000 = 8 → A8."},
-{t:"num",l:2,q:"Convert the hexadecimal value D2 to decimal.",a:["210"],ph:"число",e:"D2 = 1101 0010 = 11010010 = 128 + 64 + 16 + 2 = 210."},
+{t:"num",l:2,q:"Convert the hexadecimal value D2 to decimal.",a:["210"],ph:"number",e:"D2 = 1101 0010 = 11010010 = 128 + 64 + 16 + 2 = 210."},
 {t:"num",l:2,q:"Convert 192.168.11.10 to binary.",o:["*11000000.10101000.00001011.00001010","11000000.10101000.00001101.00001010","11000000.10100100.00001011.00001010","11000000.10101000.00001011.00000101"],e:"192 = 11000000, 168 = 10101000, 11 = 00001011, 10 = 00001010."},
-{t:"num",l:2,q:"How many hexadecimal digits make up an IPv6 address?",a:["32"],ph:"число",e:"128 бит / 4 бита на цифру = 32 hex-цифры, по 4 в каждом хекстете."},
+{t:"num",l:2,q:"How many hexadecimal digits make up an IPv6 address?",a:["32"],ph:"number",e:"128 бит / 4 бита на цифру = 32 hex-цифры, по 4 в каждом хекстете."},
 {t:"num",l:1,q:"What is a hextet?",o:["*A group of four hexadecimal digits (16 bits) in an IPv6 address","Six hexadecimal digits","An 8-bit group in an IPv4 address","A group of 6 bytes in a MAC address"],e:"IPv6 = 8 хекстетов по 16 бит."},
 {t:"num",l:2,q:"Convert binary 11111111 to hexadecimal.",a:["ff","0xff"],ph:"hex",e:"1111 = F, 1111 = F → FF = 255."},
-{t:"num",l:2,q:"What is the largest decimal value one octet can hold?",a:["255"],ph:"число",e:"8 единиц: 11111111 = 255. Поэтому октет IPv4 — от 0 до 255."},
+{t:"num",l:2,q:"What is the largest decimal value one octet can hold?",a:["255"],ph:"number",e:"8 единиц: 11111111 = 255. Поэтому октет IPv4 — от 0 до 255."},
 {t:"num",l:3,q:"A MAC address is written as 00-1A-2B-3C-4D-5E. How many bits does it contain, and how many of them form the OUI?",o:["*48 bits; the first 24 bits are the OUI","48 bits; the first 16 bits are the OUI","32 bits; the first 24 bits are the OUI","64 bits; the first 32 bits are the OUI"],e:"12 hex-цифр × 4 = 48 бит. Первые 3 байта (24 бита) — код производителя."}
 );
 
@@ -646,7 +646,7 @@ BANK.push(
 /* Лекции 6–7: детали со слайдов */
 BANK.push(
 /* Лекция 6: IPv4 */
-{t:"v4",l:1,q:"What is the prefix length notation for 255.255.255.0?",a:["24","/24"],ph:"например /24",e:"24 единицы в маске."},
+{t:"v4",l:1,q:"What is the prefix length notation for 255.255.255.0?",a:["24","/24"],ph:"e.g. /24",e:"24 единицы в маске."},
 {t:"v4",l:1,q:"What is the process of comparing an IPv4 address with the subnet mask bit by bit called?",o:["*ANDing","XORing","Subnetting","Hashing"],e:"1 AND 1 = 1, остальное 0. Результат — адрес сети."},
 {t:"v4",l:1,q:"Which statement about the prefix length is true?",o:["*It is the number of bits set to 1 in the subnet mask","It is the number of host bits","It is the number of usable hosts","It is the first octet of the address"],e:"/24 — 24 единицы, 8 нулей."},
 {t:"v4",l:1,q:"What value do all host bits have in a network address?",o:["*All 0s","All 1s","All 0s and a final 1","All 1s and a final 0"],e:"Сеть — все нули в части хоста, первый хост — нули и 1 в конце, последний хост — единицы и 0 в конце, broadcast — все единицы."},
@@ -668,25 +668,25 @@ BANK.push(
 {t:"v4",l:2,q:"172.16.0.0/16 is divided into two subnets of 200 users each. Which two subnets fit the course example?",o:["*172.16.0.0/24","*172.16.1.0/24","172.16.0.0/16","172.16.2.0/23","172.17.0.0/24"],e:"Каждая /24 даёт 254 хоста ≥ 200, и broadcast остаётся внутри своей подсети."},
 {t:"v4",l:2,q:"Which three statements describe reasons for subnetting?",o:["*It reduces overall network traffic and improves performance","*It allows security policies to be applied between subnets","*It reduces the number of devices affected by abnormal broadcast traffic","It increases the number of public addresses","It removes the need for routers"],e:"Делят по месту, по группе или функции, по типу устройств."},
 {t:"v4",l:2,q:"At which octet boundaries are networks most easily subnetted?",o:["*/8, /16 and /24","/4, /12 and /20","/10, /20 and /30","/25, /26 and /27"],e:"На границе октета шаг равен 1 в целом октете — это проще всего считать."},
-{t:"v4",l:2,q:"How many usable hosts does a /16 network have?",a:["65534","65 534","65,534"],ph:"число",e:"2^16 − 2 = 65 534."},
+{t:"v4",l:2,q:"How many usable hosts does a /16 network have?",a:["65534","65 534","65,534"],ph:"number",e:"2^16 − 2 = 65 534."},
 {t:"v4",l:2,q:"How many usable hosts does a /8 network have?",o:["*16,777,214","65,534","16,777,216","254"],e:"2^24 − 2 = 16 777 214."},
 {t:"v4",l:2,q:"10.0.0.0/8 is subnetted with a /24 mask. How many subnets are possible?",o:["*65,536","256","16,777,216","4,096"],e:"Заимствовано 16 бит: 2^16 = 65 536 подсетей по 254 хоста."},
 {t:"v4",l:2,q:"10.0.0.0/8 is subnetted with a /16 mask. How many subnets are possible?",o:["*256","65,536","128","16"],e:"Заимствовано 8 бит: 2^8 = 256 подсетей по 65 534 хоста."},
-{t:"v4",l:2,q:"What is the broadcast address of the subnet 10.1.0.0/16?",a:["10.1.255.255"],ph:"адрес",e:"Хосты 10.1.0.1 – 10.1.255.254, broadcast 10.1.255.255."},
+{t:"v4",l:2,q:"What is the broadcast address of the subnet 10.1.0.0/16?",a:["10.1.255.255"],ph:"address",e:"Хосты 10.1.0.1 – 10.1.255.254, broadcast 10.1.255.255."},
 {t:"v4",l:2,q:"How many subnets and hosts does a /29 give when a /24 is subnetted?",o:["*32 subnets with 6 hosts each","16 subnets with 14 hosts each","64 subnets with 2 hosts each","8 subnets with 30 hosts each"],e:"Заимствовано 5 бит (2^5 = 32), остаётся 3 бита хоста (2^3 − 2 = 6)."},
-{t:"v4",l:2,q:"How many /30 subnets can be made from a /24?",a:["64"],ph:"число",e:"6 заимствованных бит: 2^6 = 64 подсети по 2 хоста."},
+{t:"v4",l:2,q:"How many /30 subnets can be made from a /24?",a:["64"],ph:"number",e:"6 заимствованных бит: 2^6 = 64 подсети по 2 хоста."},
 {t:"v4",l:2,q:"What happens to the number of hosts per subnet as the prefix length gets longer?",o:["*It decreases","It increases","It stays the same","It doubles"],e:"Больше бит сети — меньше бит хоста."},
 {t:"v4",l:2,q:"Which two considerations matter when planning subnets?",o:["*The number of host addresses required in each network","*The number of individual subnets needed","The brand of the routers","The cable color","The number of DNS servers"],e:"Нужно уместить и подсети, и хосты в каждой."},
 {t:"v4",l:2,q:"In the course example, 172.16.0.0/22 gives how many host addresses?",o:["*1,022","1,024","510","2,046"],e:"10 бит хоста: 2^10 − 2 = 1 022."},
 {t:"v4",l:3,q:"A /27 is used for every link in the VLSM example. How many subnets and hosts does a /27 give from a /24?",o:["*8 subnets of 30 hosts","4 subnets of 62 hosts","16 subnets of 14 hosts","8 subnets of 32 hosts"],e:"Пример из лекции: 7 нужных подсетей помещаются в 8, но на каналах точка-точка тратятся адреса."},
-{t:"v4",l:3,q:"In the VLSM example, the last /27 subnet is divided into /30 subnets. How many /30 subnets does that give?",a:["8"],ph:"число",e:"Из /27 в /30 заимствуется 3 бита: 2^3 = 8 подсетей по 2 хоста."},
+{t:"v4",l:3,q:"In the VLSM example, the last /27 subnet is divided into /30 subnets. How many /30 subnets does that give?",a:["8"],ph:"number",e:"Из /27 в /30 заимствуется 3 бита: 2^3 = 8 подсетей по 2 хоста."},
 {t:"v4",l:3,q:"Building D has 28 hosts, the largest LAN in the VLSM example. Which prefix fits it best?",o:["*/27","/28","/26","/30"],e:"/28 даёт только 14 хостов, /27 — 30, этого хватает."},
 {t:"v4",l:2,q:"Which part of an enterprise network typically uses public IPv4 addresses?",o:["*The DMZ with internet-facing servers","The intranet","The guest Wi-Fi","The management VLAN"],e:"Интранет обычно на частных адресах, DMZ — на публичных."},
 {t:"v4",l:2,q:"Which devices should have predictable static IP addresses?",o:["*Servers and peripherals such as printers","End user clients","Guest phones","Laptops of visitors"],e:"Клиенты чаще получают адреса по DHCP, чтобы снизить ошибки и нагрузку на поддержку."},
 {t:"v4",l:2,q:"Why do most end user clients use DHCP rather than static addresses?",o:["*To reduce errors and the burden on network support staff","Because static addresses are not allowed","Because DHCP is faster than ARP","Because servers require it"],e:"Ручная настройка на сотнях клиентов приводит к ошибкам и конфликтам."},
 {t:"v4",l:3,q:"An administrator plans addressing. Which approach does the course recommend?",o:["*Use a set pattern for how addresses are allocated to each device type, such as gateways and servers","Assign addresses randomly to save time","Use only public addresses everywhere","Give every device a DHCP address, including routers"],e:"Единый шаблон (например, шлюз всегда .1) упрощает управление и поиск неисправностей."},
 {t:"v4",l:3,q:"Which tasks are part of a network requirement study for an IPv4 addressing scheme?",o:["*Determine how many subnets are needed and how many hosts each needs","*Determine DHCP address pools and VLAN pools","Choose the cable colors","Pick the routing protocol vendor","Set every host to a static address"],e:"Сначала изучают потребности сети, затем делят на подсети."},
-{t:"v4",l:3,q:"A host has IP 172.16.4.100 with mask 255.255.255.0. What is the result of ANDing them?",a:["172.16.4.0"],ph:"адрес",e:"Последний октет маски 0, поэтому последний октет адреса обнуляется."},
+{t:"v4",l:3,q:"A host has IP 172.16.4.100 with mask 255.255.255.0. What is the result of ANDing them?",a:["172.16.4.0"],ph:"address",e:"Последний октет маски 0, поэтому последний октет адреса обнуляется."},
 
 /* Лекция 7: IPv6 */
 {t:"v6",l:2,q:"Which three migration techniques did the IETF create for moving from IPv4 to IPv6?",o:["*Dual stack","*Tunneling","*Translation (NAT64)","VLSM","PAT"],e:"Это три категории техник сосуществования IPv4 и IPv6."},
@@ -741,7 +741,7 @@ BANK.push(
 {t:"icmp",l:3,q:"A ping to the default gateway fails. What does the course suggest trying next?",o:["*Ping another host on the local network that is known to be operational","Ping the loopback of the router","Reboot the router","Ping a remote server"],e:"Так можно понять, не работает шлюз или вся локальная сеть."},
 {t:"icmp",l:2,q:"What does an asterisk (*) mean in traceroute output?",o:["*A lost or unanswered packet","The destination was reached","A router with high delay","An IPv6 hop"],e:"Роутер мог не ответить из-за сбоя или потому, что настроен не отвечать."},
 {t:"icmp",l:2,q:"When does traceroute stop increasing the TTL?",o:["*When the destination is reached or a predefined maximum is hit","After exactly 3 hops","When the first router replies","When a packet is lost"],e:"Обычно максимум 30 хопов."},
-{t:"icmp",l:3,q:"What value does the TTL field have in the first message sent by traceroute?",a:["1"],ph:"число",e:"TTL = 1 истекает на первом роутере, он присылает Time Exceeded."},
+{t:"icmp",l:3,q:"What value does the TTL field have in the first message sent by traceroute?",a:["1"],ph:"number",e:"TTL = 1 истекает на первом роутере, он присылает Time Exceeded."},
 {t:"icmp",l:3,q:"Which IPv6 header field does traceroute use, in place of TTL?",o:["*Hop Limit","Flow Label","Next Header","Payload Length"],e:"Принцип тот же: Hop Limit 1, 2, 3…"}
 );
 
@@ -756,7 +756,7 @@ BANK.push(
 {t:"tr",l:2,q:"Which TCP header field checks the segment header and data for errors?",o:["*Checksum","Window size","Urgent","Sequence number"],e:"Checksum — 16 бит, проверка заголовка и данных."},
 {t:"tr",l:2,q:"Which TCP header field indicates that the contained data is urgent?",o:["*Urgent (pointer)","PSH flag","Checksum","Window size"],e:"Поле Urgent работает вместе с флагом URG."},
 {t:"tr",l:2,q:"Which four fields make up the UDP header?",o:["*Source Port, Destination Port, Length, Checksum","Source Port, Destination Port, Sequence, Checksum","Source Port, Destination Port, Window, Checksum","Source Port, Length, Flags, Checksum"],e:"Каждое поле по 16 бит: всего 8 байт (64 бита)."},
-{t:"tr",l:2,q:"How many bits is the whole UDP header?",a:["64"],ph:"число",e:"8 байт × 8 = 64 бита."},
+{t:"tr",l:2,q:"How many bits is the whole UDP header?",a:["64"],ph:"number",e:"8 байт × 8 = 64 бита."},
 {t:"tr",l:3,q:"Which TCP header field would a receiver use to tell the sender to slow down?",o:["*Window size","Sequence number","Header length","Urgent"],e:"Уменьшая окно, получатель снижает объём данных, который можно отправить без подтверждения."},
 {t:"tr",l:3,q:"A TCP segment has only the SYN flag set. What is happening?",o:["*A client is starting a connection (first step of the handshake)","The server is accepting the connection","The connection is being closed","The connection is being reset after an error"],e:"SYN — шаг 1, SYN+ACK — шаг 2, ACK — шаг 3."},
 {t:"tr",l:2,q:"Which TCP flag resets the connection when an error or timeout occurs?",o:["*RST","FIN","PSH","URG"],e:"FIN — штатное завершение, RST — аварийный сброс."},
@@ -876,17 +876,17 @@ function genSubnet(){
     ["last","What is the last usable host address in the subnet of",toIp(bc-1)],
     ["hosts","How many usable host addresses are in the subnet of",String(hosts)]];
   const k=pick(kinds);
-  return {t:"v4",l:2,gen:true,q:`${k[1]} ${toIp(ip)}/${p}?`,ans:k[2],ph:k[0]==="hosts"?"число":"адрес",
+  return {t:"v4",l:2,gen:true,q:`${k[1]} ${toIp(ip)}/${p}?`,ans:k[2],ph:k[0]==="hosts"?"number":"address",
     check:v=>normIp(v)===k[2],e:base_e};
 }
 function genConv(){
   const k=rnd(0,5);
-  if(k===0){const n=rnd(1,255),b=n.toString(2).padStart(8,"0");return {t:"num",l:2,gen:true,q:`Convert the decimal number ${n} to an 8-bit binary number.`,ans:b,ph:"8 бит",check:v=>v.replace(/\s/g,"")===b,e:`Идём по весам 128 64 32 16 8 4 2 1 и ставим 1, где вес помещается: ${n} = ${b}.`};}
-  if(k===1){const n=rnd(1,255),b=n.toString(2).padStart(8,"0");const parts=[...b].map((c,i)=>c==="1"?128>>i:0).filter(x=>x);return {t:"num",l:2,gen:true,q:`Convert the binary number ${b} to decimal.`,ans:String(n),ph:"число",check:v=>v.trim()===String(n),e:`Складываем веса единиц: ${parts.join(" + ")} = ${n}.`};}
-  if(k===2){const n=rnd(16,255),hx=n.toString(16).toUpperCase().padStart(2,"0");return {t:"num",l:2,gen:true,q:`Convert the hexadecimal value ${hx} to decimal.`,ans:String(n),ph:"число",check:v=>v.trim()===String(n),e:`${hx[0]} = ${parseInt(hx[0],16)}, ${hx[1]} = ${parseInt(hx[1],16)}: ${parseInt(hx[0],16)} × 16 + ${parseInt(hx[1],16)} = ${n}.`};}
+  if(k===0){const n=rnd(1,255),b=n.toString(2).padStart(8,"0");return {t:"num",l:2,gen:true,q:`Convert the decimal number ${n} to an 8-bit binary number.`,ans:b,ph:"8 bits",check:v=>v.replace(/\s/g,"")===b,e:`Идём по весам 128 64 32 16 8 4 2 1 и ставим 1, где вес помещается: ${n} = ${b}.`};}
+  if(k===1){const n=rnd(1,255),b=n.toString(2).padStart(8,"0");const parts=[...b].map((c,i)=>c==="1"?128>>i:0).filter(x=>x);return {t:"num",l:2,gen:true,q:`Convert the binary number ${b} to decimal.`,ans:String(n),ph:"number",check:v=>v.trim()===String(n),e:`Складываем веса единиц: ${parts.join(" + ")} = ${n}.`};}
+  if(k===2){const n=rnd(16,255),hx=n.toString(16).toUpperCase().padStart(2,"0");return {t:"num",l:2,gen:true,q:`Convert the hexadecimal value ${hx} to decimal.`,ans:String(n),ph:"number",check:v=>v.trim()===String(n),e:`${hx[0]} = ${parseInt(hx[0],16)}, ${hx[1]} = ${parseInt(hx[1],16)}: ${parseInt(hx[0],16)} × 16 + ${parseInt(hx[1],16)} = ${n}.`};}
   if(k===3){const n=rnd(16,255),hx=n.toString(16).toUpperCase().padStart(2,"0");return {t:"num",l:2,gen:true,q:`Convert the decimal number ${n} to hexadecimal.`,ans:hx,ph:"hex",check:v=>v.trim().toUpperCase().replace(/^0X/,"")===hx,e:`${n} ÷ 16 = ${Math.floor(n/16)} остаток ${n%16} → ${hx}.`};}
-  if(k===4){const p=rnd(16,30),m=toIp(maskOf(p));return {t:"v4",l:2,gen:true,q:`Write the subnet mask for prefix /${p} in dotted decimal.`,ans:m,ph:"маска",check:v=>normIp(v)===m,e:`/${p} = ${p} единиц слева: ${m}.`};}
-  const p=rnd(16,30),m=toIp(maskOf(p));return {t:"v4",l:2,gen:true,q:`Write the prefix length for the subnet mask ${m}.`,ans:"/"+p,ph:"например /24",check:v=>v.trim().replace("/","")===String(p),e:`Считаем единицы в маске: ${m} = /${p}.`};
+  if(k===4){const p=rnd(16,30),m=toIp(maskOf(p));return {t:"v4",l:2,gen:true,q:`Write the subnet mask for prefix /${p} in dotted decimal.`,ans:m,ph:"mask",check:v=>normIp(v)===m,e:`/${p} = ${p} единиц слева: ${m}.`};}
+  const p=rnd(16,30),m=toIp(maskOf(p));return {t:"v4",l:2,gen:true,q:`Write the prefix length for the subnet mask ${m}.`,ans:"/"+p,ph:"e.g. /24",check:v=>v.trim().replace("/","")===String(p),e:`Считаем единицы в маске: ${m} = /${p}.`};
 }
 function v6expand(s){
   s=s.trim().toLowerCase(); if(!/^[0-9a-f:]+$/.test(s))return null;
@@ -912,7 +912,7 @@ function genV6(){
   const s=rnd(2,5),len=rnd(2,4);for(let i=s;i<Math.min(8,s+len);i++)h[i]="0000";
   if(Math.random()<.5)h[rnd(2,7)]="0000";
   const full=h.join(":").toUpperCase(), comp=v6compress(h.join(":"));
-  return {t:"v6",l:2,gen:true,q:`Write the most compressed form of ${full}.`,ans:comp,ph:"IPv6 адрес",
+  return {t:"v6",l:2,gen:true,q:`Write the most compressed form of ${full}.`,ans:comp,ph:"IPv6 address",
     check:v=>{const e=v6expand(v);return e!==null&&e===h.join(":")&&v.trim().length<=comp.length;},
     e:`Правило 1: убираем ведущие нули в каждом хекстете. Правило 2: самую длинную серию нулевых хекстетов (одну) заменяем на ::. Результат: ${comp}.`};
 }
@@ -923,15 +923,15 @@ function genPort(){
   const p=pick(PORTS), k=rnd(0,2);
   const others=shuffle(PORTS.filter(x=>x!==p));
   const tbl="Таблица: FTP 20/21, SSH 22, Telnet 23, SMTP 25, DNS 53, DHCP 67/68, TFTP 69, HTTP 80, POP3 110, IMAP 143, SNMP 161, HTTPS 443.";
-  if(k===0)return {t:"tr",l:2,gen:true,q:`Which well-known port number does ${p[0]} use?`,ans:String(p[1]),ph:"номер порта",check:v=>v.trim()===String(p[1]),e:`${p[0]} — порт ${p[1]} (${p[2]}). ${tbl}`};
+  if(k===0)return {t:"tr",l:2,gen:true,q:`Which well-known port number does ${p[0]} use?`,ans:String(p[1]),ph:"port number",check:v=>v.trim()===String(p[1]),e:`${p[0]} — порт ${p[1]} (${p[2]}). ${tbl}`};
   if(k===1)return {t:"tr",l:2,gen:true,q:`Which protocol uses well-known port ${p[1]}?`,o:optsFrom(p[0],others.map(x=>x[0])),e:`Порт ${p[1]} — ${p[0]}. ${tbl}`};
   return {t:"tr",l:2,gen:true,q:`Which transport protocol does ${p[0]} use on port ${p[1]}?`,o:optsFrom(p[2],["TCP","UDP","UDP and TCP"]),e:`${p[0]} работает по ${p[2]}. По UDP в таблице курса: DNS (и TCP), DHCP, TFTP, SNMP. Остальные — TCP.`};
 }
 function genSeq(){
   const k=rnd(0,2);
-  if(k===0){const s=rnd(1,90)*100+1,len=pick([100,200,500,1000,1460]);return {t:"tr",l:3,gen:true,q:`A host sends a TCP segment with sequence number ${s} that carries ${len} bytes of data. Which acknowledgment number will the receiver send back?`,ans:String(s+len),ph:"число",check:v=>v.trim()===String(s+len),e:`ACK = номер следующего ожидаемого байта: ${s} + ${len} = ${s+len}.`};}
-  if(k===1){const m=pick([500,1000,1460]),n=rnd(2,8),w=m*n;return {t:"tr",l:3,gen:true,q:`The receiver advertises a window of ${w} bytes and the MSS is ${m} bytes. How many full-size segments can the sender send before it must wait for an acknowledgment?`,ans:String(n),ph:"число",check:v=>v.trim()===String(n),e:`${w} / ${m} = ${n}.`};}
-  const a=rnd(10,90)*100+1;return {t:"tr",l:3,gen:true,q:`The last acknowledgment a sender received was ACK ${a}. Which sequence number does its next new segment carry?`,ans:String(a),ph:"число",check:v=>v.trim()===String(a),e:`ACK указывает следующий ожидаемый байт, с него и начинается следующий сегмент: ${a}.`};
+  if(k===0){const s=rnd(1,90)*100+1,len=pick([100,200,500,1000,1460]);return {t:"tr",l:3,gen:true,q:`A host sends a TCP segment with sequence number ${s} that carries ${len} bytes of data. Which acknowledgment number will the receiver send back?`,ans:String(s+len),ph:"number",check:v=>v.trim()===String(s+len),e:`ACK = номер следующего ожидаемого байта: ${s} + ${len} = ${s+len}.`};}
+  if(k===1){const m=pick([500,1000,1460]),n=rnd(2,8),w=m*n;return {t:"tr",l:3,gen:true,q:`The receiver advertises a window of ${w} bytes and the MSS is ${m} bytes. How many full-size segments can the sender send before it must wait for an acknowledgment?`,ans:String(n),ph:"number",check:v=>v.trim()===String(n),e:`${w} / ${m} = ${n}.`};}
+  const a=rnd(10,90)*100+1;return {t:"tr",l:3,gen:true,q:`The last acknowledgment a sender received was ACK ${a}. Which sequence number does its next new segment carry?`,ans:String(a),ph:"number",check:v=>v.trim()===String(a),e:`ACK указывает следующий ожидаемый байт, с него и начинается следующий сегмент: ${a}.`};
 }
 const HDR={
   IPv4:{t:"l3",f:[["Version",4,"identifies the IP version (binary 0100)"],["Differentiated Services",8,"is used for QoS"],["Time to Live",8,"is a hop count; the packet is discarded at zero"],["Protocol",8,"identifies the next-level protocol, such as ICMP, TCP or UDP"],["Header Checksum",16,"detects corruption in the header"],["Source Address",32,"holds the address of the sender"],["Destination Address",32,"holds the address of the final receiver"]]},
@@ -984,7 +984,7 @@ function genNth(){
   const bp=big?16:24, q=big?rnd(18,24):rnd(25,29), size=Math.pow(2,32-q), cnt=Math.pow(2,q-bp);
   const n=rnd(2,Math.min(cnt,8)), net=(base+(n-1)*size)>>>0;
   return {t:"v4",l:3,gen:true,q:`${toIp(base)}/${bp} is divided into /${q} subnets. What is the network address of subnet number ${n} (the first subnet is number 1)?`,
-    ans:toIp(net),ph:"адрес",check:v=>normIp(v).replace(/\/\d+$/,"")===toIp(net),
+    ans:toIp(net),ph:"address",check:v=>normIp(v).replace(/\/\d+$/,"")===toIp(net),
     e:`Каждая /${q} занимает ${size} адресов (${cnt} подсетей). Подсеть №${n} начинается с ${toIp(base)} + (${n} − 1) × ${size} = ${toIp(net)}.`};
 }
 const hx=n=>n.toString(16);
@@ -1004,14 +1004,14 @@ function genV6Sub(){
   const g=rnd(1,0xffff), n=rnd(1,400);
   const pref=`2001:db8:${hx(g)}`, want=v6expand(`${pref}:${hx(n)}::`);
   return {t:"v6",l:2,gen:true,q:`${pref}::/48 is divided into /64 subnets, numbered from 0. What is the prefix of subnet number ${n} (decimal)?`,
-    ans:`${pref}:${hx(n)}::/64`,ph:"IPv6 префикс",check:v=>{const e=v6expand(v.trim().replace(/\/64$/,""));return e!==null&&e===want;},
+    ans:`${pref}:${hx(n)}::/64`,ph:"IPv6 prefix",check:v=>{const e=v6expand(v.trim().replace(/\/64$/,""));return e!==null&&e===want;},
     e:`Номер подсети записывается в хекстете Subnet ID в шестнадцатеричном виде: ${n} = 0x${hx(n)}. Ответ ${pref}:${hx(n)}::/64.`};
 }
 function genV6Pref(){
   const h=["2001","db8"];for(let i=0;i<6;i++)h.push(hx(rnd(0,0xffff)));
   const addr=v6compress(h.map(x=>x.padStart(4,"0")).join(":"));
   const want=v6expand(h.slice(0,4).join(":")+"::");
-  return {t:"v6",l:2,gen:true,q:`What is the /64 prefix of ${addr}/64?`,ans:v6compress(want)+"/64",ph:"IPv6 префикс",
+  return {t:"v6",l:2,gen:true,q:`What is the /64 prefix of ${addr}/64?`,ans:v6compress(want)+"/64",ph:"IPv6 prefix",
     check:v=>{const e=v6expand(v.trim().replace(/\/64$/,""));return e!==null&&e===want;},
     e:`/64 = первые 4 хекстета (${h.slice(0,4).join(":")}), остальное обнуляется: ${v6compress(want)}/64.`};
 }
@@ -1049,32 +1049,32 @@ function renderSetup(){
   const counts={};BANK.forEach(q=>counts[q.t]=(counts[q.t]||0)+1);
   app.innerHTML=`
   <section class="panel" aria-labelledby="h-setup">
-    <h2 id="h-setup">Настройка теста</h2>
+    <h2 id="h-setup">Test setup</h2>
     <div class="group">
-      <div class="label"><span>Темы</span><span><button type="button" id="all-on">Выбрать все</button><button type="button" id="all-off">Снять все</button></span></div>
+      <div class="label"><span>Topics</span><span><button type="button" id="all-on">Select all</button><button type="button" id="all-off">Clear all</button></span></div>
       <div class="topics">${Object.entries(TOPICS).map(([k,v])=>{const s=stats[k];const last=s?`${Math.round(s.c/s.n*100)}%`:"—";
-        return `<button type="button" class="chip" data-topic="${k}" aria-pressed="${settings.topics.includes(k)}"><span class="nm">${esc(v.n)}</span><span class="meta"><span>${esc(v.s)}</span><span title="Результат последнего теста по теме">${counts[k]||0} в · ${last}</span></span></button>`}).join("")}</div>
+        return `<button type="button" class="chip" data-topic="${k}" aria-pressed="${settings.topics.includes(k)}"><span class="nm">${esc(v.n)}</span><span class="meta"><span>${esc(v.s)}</span><span title="Last test result for this topic">${counts[k]||0} q · ${last}</span></span></button>`}).join("")}</div>
     </div>
     <div class="group">
-      <div class="label"><span>Сложность</span></div>
+      <div class="label"><span>Difficulty</span></div>
       <div class="seg">${[1,2,3].map(l=>`<button type="button" data-level="${l}" aria-pressed="${settings.levels.includes(l)}">${wire(l,true)}${LEVELS[l].n}</button>`).join("")}</div>
-      <div class="legend"><span>${wire(1,true)}определения и факты</span><span>${wire(2,true)}применить знание к задаче</span><span>${wire(3,true)}сценарии и «почему»</span></div>
+      <div class="legend"><span>${wire(1,true)}definitions and facts</span><span>${wire(2,true)}apply knowledge to a task</span><span>${wire(3,true)}scenarios and “why”</span></div>
     </div>
     <div class="group">
-      <div class="label"><span>Количество вопросов</span></div>
-      <div class="seg">${[10,20,40,"all"].map(c=>`<button type="button" data-count="${c}" aria-pressed="${settings.count===c}">${c==="all"?"Все":c}</button>`).join("")}</div>
+      <div class="label"><span>Number of questions</span></div>
+      <div class="seg">${[10,20,40,"all"].map(c=>`<button type="button" data-count="${c}" aria-pressed="${settings.count===c}">${c==="all"?"All":c}</button>`).join("")}</div>
     </div>
     <div class="group">
-      <div class="label"><span>Режим</span></div>
+      <div class="label"><span>Mode</span></div>
       <div class="seg">
-        <button type="button" data-mode="practice" aria-pressed="${settings.mode==="practice"}">Тренировка: ответ и пояснение сразу</button>
-        <button type="button" data-mode="exam" aria-pressed="${settings.mode==="exam"}">Экзамен: результат в конце</button>
+        <button type="button" data-mode="practice" aria-pressed="${settings.mode==="practice"}">Practice: answer and explanation right away</button>
+        <button type="button" data-mode="exam" aria-pressed="${settings.mode==="exam"}">Exam: results at the end</button>
       </div>
     </div>
-    <label class="check"><input type="checkbox" id="gen" ${settings.gen?"checked":""}><span>Добавлять случайные задачи: подсети, маски, longest match, поля заголовков IPv4/IPv6/TCP/UDP, порты, SEQ/ACK, EUI-64, подсети IPv6, системы счисления. Они создаются заново при каждом запуске, поэтому их нельзя выучить наизусть.</span></label>
+    <label class="check"><input type="checkbox" id="gen" ${settings.gen?"checked":""}><span>Add random tasks: subnets, masks, longest match, IPv4/IPv6/TCP/UDP header fields, ports, SEQ/ACK, EUI-64, IPv6 subnets, number systems. They are generated fresh every run, so they cannot be memorized.</span></label>
     <div class="foot">
-      <span class="count">${pool.length} вопросов из банка подходят${genOn?" + задачи на расчёт":""}</span>
-      <button type="button" class="btn" id="start" ${pool.length||genOn?"":"disabled"}>Начать тест</button>
+      <span class="count">${pool.length} bank questions match${genOn?" + calculation tasks":""}</span>
+      <button type="button" class="btn" id="start" ${pool.length||genOn?"":"disabled"}>Start test</button>
     </div>
   </section>`;
   app.querySelectorAll("[data-topic]").forEach(b=>b.onclick=()=>{const k=b.dataset.topic;settings.topics=settings.topics.includes(k)?settings.topics.filter(x=>x!==k):[...settings.topics,k];saveSet();renderSetup();});
@@ -1115,30 +1115,30 @@ function renderQ(){
   app.innerHTML=`
   <section class="panel" aria-live="polite">
     <div class="progress">
-      <div class="prow"><span>Вопрос ${S.i+1} из ${n}</span><span>${S.mode==="practice"?`Верно: ${right} из ${S.answers.length}`:"Режим экзамена"}</span></div>
+      <div class="prow"><span>Question ${S.i+1} of ${n}</span><span>${S.mode==="practice"?`Correct: ${right} of ${S.answers.length}`:"Exam mode"}</span></div>
       <div class="bar"><i style="width:${(S.i+(answered?1:0))/n*100}%"></i></div>
     </div>
     <div class="qmeta">
       <span class="tag">${esc(topic.n)}</span>
       <span class="tag">${wire(q.l,true)}${LEVELS[q.l].n}</span>
-      ${q.x==="end"?`<span class="tag ex">Из end-term</span>`:""}
-      ${q.gen?`<span class="tag">Случайная задача</span>`:""}
+      ${q.x==="end"?`<span class="tag ex">From end-term</span>`:""}
+      ${q.gen?`<span class="tag">Random task</span>`:""}
     </div>
     <p class="qtext">${esc(q.q)}</p>
-    ${multi?`<div class="hint">Выберите ${q.nCorrect}</div>`:""}
+    ${multi?`<div class="hint">Choose ${q.nCorrect}</div>`:""}
     ${q.opts?`<div class="opts" role="group">${q.opts.map((o,j)=>{
       let cls="opt";
       if(answered&&S.mode==="practice"){if(o.ok)cls+=" right";else if(S.sel.has(j))cls+=" wrong";}
       else if(S.sel.has(j))cls+=" sel";
       return `<button type="button" class="${cls}" data-o="${j}" ${answered?"disabled":""} aria-pressed="${S.sel.has(j)}"><span class="k">${j+1}</span><span>${esc(o.t)}</span></button>`}).join("")}</div>`
-     :`<input class="inp" id="ans" autocomplete="off" spellcheck="false" placeholder="Ответ: ${esc(q.ph||"")}" value="${esc(S.input)}" ${answered?"disabled":""}>`}
+     :`<input class="inp" id="ans" autocomplete="off" spellcheck="false" placeholder="Answer: ${esc(q.ph||"")}" value="${esc(S.input)}" ${answered?"disabled":""}>`}
     ${answered&&S.mode==="practice"?feedback(q):""}
     <div class="actions">
-      <button type="button" class="btn ghost" id="quit">Завершить тест</button>
-      ${answered?`<button type="button" class="btn" id="next">${S.i+1<n?"Следующий вопрос":"Показать результат"}</button>`
-               :`<button type="button" class="btn" id="submit">${S.mode==="practice"?"Проверить":"Ответить"}</button>`}
+      <button type="button" class="btn ghost" id="quit">End test</button>
+      ${answered?`<button type="button" class="btn" id="next">${S.i+1<n?"Next question":"Show results"}</button>`
+               :`<button type="button" class="btn" id="submit">${S.mode==="practice"?"Check":"Submit"}</button>`}
     </div>
-    <div class="kbd">${q.opts?"Клавиши 1–"+q.opts.length+" выбирают вариант, ":""}Enter — ${answered?"дальше":"ответить"}</div>
+    <div class="kbd">${q.opts?"Keys 1–"+q.opts.length+" select an option, ":""}Enter — ${answered?"next":"answer"}</div>
   </section>`;
   app.querySelectorAll("[data-o]").forEach(b=>b.onclick=()=>toggle(+b.dataset.o));
   const inp=document.getElementById("ans");
@@ -1161,11 +1161,11 @@ function isRight(q){
   return q.a.some(a=>n(a)===n(S.input));
 }
 function correctText(q){return q.opts?q.opts.filter(o=>o.ok).map(o=>o.t).join("; "):(q.ans||q.a[0]);}
-function yourText(q,a){return q.opts?(a.sel.length?a.sel.map(j=>q.opts[j].t).join("; "):"нет ответа"):(a.input||"нет ответа");}
+function yourText(q,a){return q.opts?(a.sel.length?a.sel.map(j=>q.opts[j].t).join("; "):"no answer"):(a.input||"no answer");}
 function feedback(q){
   const a=S.answers[S.answers.length-1];
-  return `<div class="fb ${a.ok?"ok":"bad"}"><strong>${a.ok?"Верно.":"Неверно."}</strong>
-    ${a.ok?"":`<span>Правильный ответ: <span class="${q.opts?"":"ans"}">${esc(correctText(q))}</span></span>`}
+  return `<div class="fb ${a.ok?"ok":"bad"}"><strong>${a.ok?"Correct.":"Incorrect."}</strong>
+    ${a.ok?"":`<span>Correct answer: <span class="${q.opts?"":"ans"}">${esc(correctText(q))}</span></span>`}
     <span>${esc(q.e)}</span></div>`;
 }
 function submit(){
@@ -1196,28 +1196,28 @@ function renderResults(){
   Object.entries(byT).forEach(([t,[cc,nn]])=>{stats[t]={c:cc,n:nn,at:Date.now()};});
   store.set("itn-trainer-stats",stats);
   const wrong=A.filter(a=>!a.ok);
-  const verdict=p>=85?"Уверенный уровень. Добивайте вопросы уровня «Понимание»." :p>=65?"Хорошая база. Пройдите ошибки и слабые темы ещё раз.":p>=40?"Основа есть, но много пробелов. Начните со слабых тем в режиме тренировки.":"Пока рано на экзамен. Пройдите темы по одной в режиме тренировки.";
+  const verdict=p>=85?"Solid level. Finish off the Understanding questions." :p>=65?"Good foundation. Go through your mistakes and weak topics again.":p>=40?"You have the basics, but there are many gaps. Start with weak topics in practice mode.":"Not exam-ready yet. Go through the topics one by one in practice mode.";
   app.innerHTML=`
   <section class="panel">
-    <h2>Результат</h2>
-    <div class="score"><span class="big" style="color:${color(p)}">${p}%</span><span class="count">${c} из ${A.length} верно${S.answers.length<S.qs.length?` · отвечено ${A.length} из ${S.qs.length}`:""}</span></div>
+    <h2>Results</h2>
+    <div class="score"><span class="big" style="color:${color(p)}">${p}%</span><span class="count">${c} of ${A.length} correct${S.answers.length<S.qs.length?` · answered ${A.length} of ${S.qs.length}`:""}</span></div>
     <p class="sub" style="margin:0">${verdict}</p>
-    <div class="levels">${[1,2,3].map(l=>{const [cc,nn]=byL[l];const pp=pct(cc,nn);return `<div class="lv"><span class="n">${wire(l,true)}${LEVELS[l].n}</span><span class="v">${nn?pp+"%":"—"}</span><span class="count">${nn?`${cc} из ${nn}`:"не было вопросов"}</span></div>`}).join("")}</div>
+    <div class="levels">${[1,2,3].map(l=>{const [cc,nn]=byL[l];const pp=pct(cc,nn);return `<div class="lv"><span class="n">${wire(l,true)}${LEVELS[l].n}</span><span class="v">${nn?pp+"%":"—"}</span><span class="count">${nn?`${cc} of ${nn}`:"no questions"}</span></div>`}).join("")}</div>
     <div class="tbl-wrap"><table>
-      <thead><tr><th>Тема</th><th class="r">Верно</th><th class="r">%</th><th></th></tr></thead>
+      <thead><tr><th>Topic</th><th class="r">Correct</th><th class="r">%</th><th></th></tr></thead>
       <tbody>${Object.entries(byT).sort((a,b)=>pct(...a[1])-pct(...b[1])).map(([t,[cc,nn]])=>{const pp=pct(cc,nn);return `<tr><td>${esc(TOPICS[t].n)}</td><td class="r">${cc}/${nn}</td><td class="r">${pp}</td><td><span class="meter"><i style="width:${pp}%;background:${color(pp)}"></i></span></td></tr>`}).join("")}</tbody>
     </table></div>
     <div class="actions">
-      <button type="button" class="btn ghost" id="new">Новый тест</button>
-      ${wrong.length?`<button type="button" class="btn" id="retry">Повторить ошибки (${wrong.length})</button>`:""}
+      <button type="button" class="btn ghost" id="new">New test</button>
+      ${wrong.length?`<button type="button" class="btn" id="retry">Retry mistakes (${wrong.length})</button>`:""}
     </div>
   </section>
-  ${wrong.length?`<section class="panel"><h2>Разбор ошибок</h2><div class="mist">${wrong.map(a=>`
+  ${wrong.length?`<section class="panel"><h2>Mistake review</h2><div class="mist">${wrong.map(a=>`
     <div class="mi">
       <div class="qmeta"><span class="tag">${esc(TOPICS[a.q.t].n)}</span><span class="tag">${wire(a.q.l,true)}${LEVELS[a.q.l].n}</span></div>
       <div class="q">${esc(a.q.q)}</div>
-      <div class="row yours"><b>Ваш ответ:</b> ${esc(yourText(a.q,a))}</div>
-      <div class="row corr"><b>Правильно:</b> ${esc(correctText(a.q))}</div>
+      <div class="row yours"><b>Your answer:</b> ${esc(yourText(a.q,a))}</div>
+      <div class="row corr"><b>Correct:</b> ${esc(correctText(a.q))}</div>
       <div class="e">${esc(a.q.e)}</div>
     </div>`).join("")}</div></section>`:""}`;
   document.getElementById("new").onclick=()=>{S=null;renderSetup();window.scrollTo({top:0});};
